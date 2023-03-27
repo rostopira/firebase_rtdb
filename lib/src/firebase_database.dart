@@ -120,14 +120,19 @@ class FirebaseDatabase {
   /// Resumes our connection to the Firebase Database backend after a previous
   /// [goOffline] call.
   Future<void> goOnline() async {
-    final _ = connection;
-    // throw UnimplementedError();
+    final c = _connection;
+    if (c == null || c.state > SocketState.CONNECTED) {
+      final newc = WsConnectionBase(host);
+      _connection = newc;
+      await newc.connect();
+    }
   }
 
   /// Shuts down our connection to the Firebase Database backend until
   /// [goOnline] is called.
-  Future<void> goOffline() {
-    throw UnimplementedError();
+  Future<void> goOffline() async {
+    await _connection?.close();
+    _connection = null;
   }
 
   /// The Firebase Database client automatically queues writes and sends them to

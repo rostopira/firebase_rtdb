@@ -81,6 +81,8 @@ class DatabaseReference extends Query {
   /// Returns an [OnDisconnect] instance.
   OnDisconnect onDisconnect() => OnDisconnect(this);
 
+  Future<void> remove() => set(null);
+
 }
 
 class OnDisconnect {
