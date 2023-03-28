@@ -267,6 +267,8 @@ class WsConnectionBase {
     await _socket?.close();
     _socket = null;
     _state = SocketState.CLOSED;
+    _streams.values.forEach((stream) => stream.addError("disconnected"));
+    _streams.clear();
   }
 
   void printError(String error) {
